@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:"
+    />
+    <title>Keycap Studio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Keycap Studio home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span class="brand-name">keycap<span>studio</span></span>
+        </a>
+        <div class="project-heading">
+          <span class="eyebrow">YOUR WORKSPACE</span>
+          <input id="project-name" class="project-name" value="Midnight Bloom" aria-label="Project name" />
+        </div>
+        <div class="top-actions">
+          <span class="save-status"><span class="status-dot"></span><span id="save-status">All changes saved</span></span>
+          <button class="button button-quiet" id="open-project">
+            <span class="button-icon" aria-hidden="true">↗</span> Open
+          </button>
+          <button class="button button-primary" id="save-project">
+            <span class="button-icon" aria-hidden="true">↓</span> Save design
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="panel sidebar">
+          <div class="section-block">
+            <div class="section-heading">
+              <span class="section-kicker">01</span>
+              <h2>Choose a layout</h2>
+              <button class="text-button back-layout-button" id="back-layout" type="button" hidden>← Back</button>
+            </div>
+            <div class="layout-options" id="layout-options" role="group" aria-label="Keyboard layout">
+              <button class="layout-option" data-layout="60" aria-pressed="false">
+                <span class="layout-preview preview-60" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>60% Compact</strong><small>61 keys · No function row</small></span>
+                <span class="radio-mark"></span>
+              </button>
+              <button class="layout-option" data-layout="65" aria-pressed="false">
+                <span class="layout-preview preview-65" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>65% Compact</strong><small>65 keys · Arrow cluster</small></span>
+                <span class="radio-mark"></span>
+              </button>
+              <button class="layout-option active" data-layout="tkl" aria-pressed="true">
+                <span class="layout-preview preview-tkl" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>TKL</strong><small>87 keys · Tenkeyless</small></span>
+                <span class="radio-mark"></span>
+              </button>
+              <button class="layout-option" data-layout="full" aria-pressed="false">
+                <span class="layout-preview preview-full" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>Full size</strong><small>104 keys · Number pad</small></span>
+                <span class="radio-mark"></span>
+              </button>
+              <button class="layout-option" data-layout="s75" aria-pressed="false">
+                <span class="layout-preview preview-s75" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>AULA S75 Pro</strong><small>80 keys · USB hardware support</small></span>
+                <span class="radio-mark"></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="section-block palette-block">
+            <div class="section-heading">
+              <span class="section-kicker">02</span>
+              <h2>Color palette</h2>
+              <button class="icon-button" id="add-color" title="Add current color" aria-label="Add current color">+</button>
+            </div>
+            <p class="section-description">Pick a shade, then paint your keys.</p>
+            <div class="palette" id="palette" aria-label="Color swatches"></div>
+            <button class="custom-color" id="custom-color">
+              <span class="color-wheel" aria-hidden="true">✳</span> Choose a custom color
+              <span class="custom-arrow" aria-hidden="true">↗</span>
+            </button>
+            <input id="color-picker" type="color" value="#a78bfa" aria-label="Choose a custom color" />
+          </div>
+
+          <div class="sidebar-note">
+            <span class="note-icon" aria-hidden="true">✦</span>
+            <div><strong>Make it yours</strong><p>Click a key to select it. Use a brush to color more keys at once.</p></div>
+          </div>
+        </aside>
+
+        <section class="canvas-area" aria-label="Keyboard design preview">
+          <div class="canvas-topline">
+            <div>
+              <div class="canvas-title-row">
+                <span class="live-indicator"></span>
+                <h1>Your keyboard</h1>
+              </div>
+              <p id="layout-caption">TKL · 87 keys · ANSI layout</p>
+            </div>
+            <div class="canvas-actions">
+              <button class="icon-button" id="reset-design" title="Reset key colors" aria-label="Reset key colors">↺</button>
+              <span class="canvas-divider"></span>
+              <button class="icon-button" id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+              <span class="zoom-level" id="zoom-level">100%</span>
+              <button class="icon-button" id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button>
+            </div>
+          </div>
+
+          <div class="keyboard-viewport" id="keyboard-viewport">
+            <div class="keyboard-board" id="keyboard-board"></div>
+          </div>
+
+          <div class="canvas-footer">
+            <div class="key-count"><span id="colored-count">0</span> keys customized <span class="footer-dot">·</span> <span id="total-count">87</span> total</div>
+            <div class="canvas-hint"><span class="keyboard-hint-key">Shift</span> + click to select multiple keys</div>
+          </div>
+        </section>
+
+        <aside class="panel inspector">
+          <div class="inspector-heading">
+            <div><span class="section-kicker">DESIGN TOOLS</span><h2>Customize</h2></div>
+            <span class="sparkle" aria-hidden="true">✳</span>
+          </div>
+
+          <div class="inspector-section">
+            <div class="field-label-row"><label>Selected key</label><span id="selection-count">1 selected</span></div>
+            <div class="selected-key-card">
+              <div class="selected-key-icon" id="selected-key-icon">⏎</div>
+              <div class="selected-key-copy"><strong id="selected-key-name">Enter</strong><span>Keyboard key</span></div>
+              <span class="selected-key-color" id="selected-key-color"></span>
+            </div>
+          </div>
+
+          <div class="inspector-section color-input-section">
+            <div class="field-label-row"><label for="hex-color">Key color</label><span class="color-mode-label">HEX</span></div>
+            <div class="hex-input-wrap">
+              <span id="hex-swatch" class="hex-swatch"></span>
+              <span class="hash-sign">#</span>
+              <input id="hex-color" type="text" value="A78BFA" maxlength="6" spellcheck="false" aria-label="Hex color" />
+              <button class="copy-color" id="copy-color" title="Copy color" aria-label="Copy color">▣</button>
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <div class="field-label-row"><label>Quick colors</label><button class="text-button" id="more-colors">More colors</button></div>
+            <div class="quick-colors" id="quick-colors"></div>
+          </div>
+
+          <div class="inspector-section brush-section">
+            <div class="field-label-row"><label>Paint mode</label><span class="mode-tip">Click keys to apply</span></div>
+            <div class="brush-options" id="brush-options" role="group" aria-label="Paint mode">
+              <button class="brush-option active" data-mode="select" aria-pressed="true"><span>↖</span>Select</button>
+              <button class="brush-option" data-mode="key" aria-pressed="false"><span>◩</span>Key</button>
+              <button class="brush-option" data-mode="row" aria-pressed="false"><span>▤</span>Row</button>
+              <button class="brush-option" data-mode="all" aria-pressed="false"><span>▦</span>All</button>
+            </div>
+          </div>
+
+          <div class="inspector-section effect-section">
+            <div class="field-label-row"><label for="effect-select">Keyboard lighting</label><span class="preview-tag">HARDWARE</span></div>
+            <div class="select-wrap">
+              <select id="effect-select" aria-label="Keyboard lighting effect">
+                <option value="static">Custom per-key colors</option>
+                <option value="solid">Static single color</option>
+                <option value="single-on">Single On</option>
+                <option value="single-off">Single Off</option>
+                <option value="glittering">Glittering</option>
+                <option value="fluttering">Fluttering</option>
+                <option value="colourful">Colourful</option>
+                <option value="breathing">Breathing</option>
+                <option value="rainbow">Spectrum</option>
+                <option value="outward">Outward</option>
+                <option value="wave">Scrolling wave</option>
+                <option value="rolling">Rolling</option>
+                <option value="rotating">Rotating</option>
+                <option value="explode">Explode</option>
+                <option value="launch">Launch</option>
+                <option value="ripples">Ripples</option>
+                <option value="flowing">Flowing</option>
+                <option value="pulsating">Pulsating</option>
+                <option value="tilt">Tilt</option>
+                <option value="shuttle">Shuttle</option>
+                <option value="off">Off</option>
+              </select>
+              <span class="select-chevron" aria-hidden="true">⌄</span>
+            </div>
+          </div>
+
+          <div class="hardware-section">
+            <div class="field-label-row">
+              <label>Connected keyboard</label>
+              <button class="text-button" id="refresh-keyboard" type="button">Refresh</button>
+            </div>
+            <div class="select-wrap device-select-wrap" id="keyboard-device-wrap" hidden>
+              <select id="keyboard-device" aria-label="Select connected keyboard"></select>
+              <span class="select-chevron" aria-hidden="true">⌄</span>
+            </div>
+            <p class="hardware-status" id="keyboard-status" role="status">Detecting USB keyboards…</p>
+            <button class="button button-primary apply-button" id="apply-lighting" type="button" disabled>
+              Apply to keyboard
+            </button>
+            <p class="hardware-hint">Connect by USB and select the AULA S75 Pro layout to apply lighting.</p>
+          </div>
+
+          <div class="inspector-footer">
+            <span class="footer-tip-icon" aria-hidden="true">i</span>
+            <p>Lighting changes are sent to the keyboard only when you apply them. Close other AULA lighting software first.</p>
+          </div>
+        </aside>
+      </main>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+    <script src="./renderer.js"></script>
+  </body>
+</html>

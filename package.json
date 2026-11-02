@@ -1,0 +1,17 @@
+{
+  "name": "keycap-studio",
+  "version": "1.0.0",
+  "description": "A desktop keyboard layout and color design studio.",
+  "license": "GPL-3.0-or-later",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "node-hid": "^3.1.2"
+  },
+  "devDependencies": {
+    "electron": "^45.2.1"
+  }
+}
