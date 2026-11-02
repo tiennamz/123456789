@@ -49,3 +49,5 @@ function detectKeyboards(devices) {
 }
 
 module.exports = { AULA_S75_PRO, detectKeyboards, deviceIdentity };
+
+// dfghjuklrtyuiodfghjk
